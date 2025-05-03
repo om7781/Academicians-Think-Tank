@@ -9,17 +9,23 @@ import { toast, ToastContainer } from 'react-toastify'
 
 const page = () => {
   const router = useRouter();
-  const [user,setUser] = React.useState({
+  const [user,setUser] = useState({
     email: "",
     password: ""
   })
+
+  const redirect = () =>{
+    setTimeout(() => {
+    router.push('/')
+    }, 3500);
+  }
 
   const onLogin = async(e) =>{
     try {
       e.preventDefault()
       // console.log(user)
       const response = await axios.post('/api/users/login',user)
-      toast.success(' You can Now Login!', {
+      toast.success(' You are logged in!', {
               position: "top-center",
               autoClose: 3000,
               hideProgressBar: false,
@@ -29,7 +35,7 @@ const page = () => {
               theme: "light",
               });
       console.log("Login Success",response.data)
-      router.push('/')
+      redirect();
     } catch (error) {
       console.log("Error : ", error);
     } 
@@ -69,7 +75,7 @@ const page = () => {
         <Link href="/" className="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
       </div>
 
-      <button onClick={onLogin}  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+      <button onClick={onLogin} type='submit' className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
         Sign In
       </button>
       <ToastContainer/>
