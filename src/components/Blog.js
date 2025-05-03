@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
 
 const Blog = () => {
   const [blog,setBlog] = useState([])
@@ -13,7 +13,7 @@ const Blog = () => {
     setBlog(data)
     console.log(blog)
     // console.log(response.data)
-  }
+  } 
 
   useEffect(()=>{
     getData()

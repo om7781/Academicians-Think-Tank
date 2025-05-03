@@ -1,12 +1,19 @@
 "use client";
 import axios from "axios";
-import { Link, MessageCircle, SendIcon, ThumbsUpIcon } from "lucide-react";
+import {
+  MessageCircle,
+  Send,
+  SendIcon,
+  ThumbsUpIcon,
+} from "lucide-react";
 import React, { use, useEffect, useState } from "react";
 import { ThumbsUp } from "lucide-react";
+import Link from "next/link";
 
 const page = ({ params }) => {
   const [commentInput, setcommentInput] = useState("");
   const [isLiked, setisLiked] = useState(false);
+  const [commentbox, setCommentbox] = useState(false);
   const [comment, setComment] = useState([]);
   const { id } = use(params);
   const [blog, setBlog] = useState([]);
@@ -32,14 +39,18 @@ const page = ({ params }) => {
     console.log(comment);
     setcommentInput("");
   };
+
+  const displayCommentBox = () => {
+    setCommentbox(!commentbox)
+    console.log(commentbox)
+  }
   return (
     <>
       <div className="min-h-screen bg-gray-50 py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/blog">
-            <a className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block transition">
+          <Link href="/Blog"
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-6 inline-block transition">
               ← Back to Blog
-            </a>
           </Link>
 
           <article className="bg-white p-8 rounded-2xl shadow-lg">
@@ -88,39 +99,41 @@ const page = ({ params }) => {
                 )}
                 {isLiked ? "Liked" : "Like"}
               </button>
-              <button className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition">
+              <button onClick={displayCommentBox} className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition">
                 <MessageCircle className="w-5 h-5" />
                 Comment
               </button>
             </div>
-            <div className="commentBox py-20 bg-slate-500 my-3 rounded flex justify-between row-auto">
-              <div>
-                <ul>
-                  {comment.map((e, i) => {
-                    return <li key={i}> {e} </li>;
-                  })}
+            {commentbox ? (<div className="bg-slate-100 my-6 p-6 rounded-xl shadow-md">
+              <div className="mb-4 max-h-48 overflow-y-auto">
+                <ul className="space-y-2 text-gray-800 text-sm">
+                  {comment.map((e, i) => (
+                     e=='' ? console.log("Empty string") : <li
+                      key={i}
+                      className="bg-white px-4 py-2 rounded-lg shadow-sm"
+                    >
+                      {e}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div>
-                <div className="flex justify-around">
-                  <div className="w-full">
-                    <input
-                      className=" h-auto py-2 w-full  bg-amber-50 rounded"
-                      value={commentInput}
-                      onChange={(e) => {
-                        setcommentInput(e.currentTarget.value);
-                      }}
-                    />
-                  </div>
-                  <button
-                    onClick={displayComments}
-                    className="py-2 px-3 bg-blue-400 rounded cursor-pointer"
-                  >
-                    <SendIcon />
-                  </button>
-                </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-sm"
+                  type="text"
+                  placeholder="Write a comment..."
+                  value={commentInput}
+                  onChange={(e) => setcommentInput(e.currentTarget.value)}
+                />
+                <button
+                  onClick={displayComments}
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
               </div>
-            </div>
+            </div>) : ""}
           </article>
         </div>
       </div>

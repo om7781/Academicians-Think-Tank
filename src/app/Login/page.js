@@ -1,6 +1,39 @@
-import React from 'react'
+"use client"
+import axios from 'axios'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
+
+
 
 const page = () => {
+  const router = useRouter();
+  const [user,setUser] = React.useState({
+    email: "",
+    password: ""
+  })
+
+  const onLogin = async(e) =>{
+    try {
+      e.preventDefault()
+      // console.log(user)
+      const response = await axios.post('/api/users/login',user)
+      toast.success(' You can Now Login!', {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
+      console.log("Login Success",response.data)
+      router.push('/')
+    } catch (error) {
+      console.log("Error : ", error);
+    } 
+  }
   return (
     <>
 <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -11,6 +44,7 @@ const page = () => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input 
+       onChange={(e) => setUser(prev => ({ ...prev, email: e.target.value }))}
           type="email" 
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
           placeholder="your@email.com"
@@ -20,6 +54,7 @@ const page = () => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
         <input 
+          onChange={(e) => setUser(prev => ({ ...prev, password: e.target.value }))}
           type="password" 
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
           placeholder="••••••••"
@@ -31,17 +66,18 @@ const page = () => {
           <input type="checkbox" className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
           <span className="ml-2 text-sm text-gray-600">Remember me</span>
         </label>
-        <a href="/" className="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+        <Link href="/" className="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
       </div>
 
-      <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+      <button onClick={onLogin}  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
         Sign In
       </button>
+      <ToastContainer/>
     </form>
 
     <div className="mt-6 text-center text-sm text-gray-600">
       Don't have an account? 
-      <a href="/Signup" className="text-indigo-600 hover:text-indigo-500 font-medium">Sign up</a>
+      <Link href="/Signup" className="text-indigo-600 hover:text-indigo-500 font-medium">Sign up</Link>
     </div>
   </div>
 </div>
