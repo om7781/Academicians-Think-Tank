@@ -1,76 +1,63 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
 
 const page = () => {
-  return (
-        <>
-		<div className="sm:text-5xl text-2xl font-bold title-font text-gray-900 mb-4 text-center mt-10 mb-10" > The Blog Page </div>
-        <section className="dark:bg-gray-100 dark:text-gray-800">
-	<div className="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12">
-		<a rel="noopener noreferrer" href="#" className="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 dark:bg-gray-50">
-			<img src="https://source.unsplash.com/random/480x360" alt="" className="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500" />
-			<div className="p-6 space-y-2 lg:col-span-5">
-				<h3 className="text-2xl font-semibold sm:text-4xl group-hover:underline group-focus:underline">Noster tincidunt reprimique ad pro</h3>
-				<span className="text-xs dark:text-gray-600">February 19, 2021</span>
-				<p>Ei delenit sensibus liberavisse pri. Quod suscipit no nam. Est in graece fuisset, eos affert putent doctus id.</p>
+  const [featuredPost, setFeaturedPost] = useState(null);
+  const [otherPosts, setOtherPosts] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3003/api')
+      .then((response) => {
+        const data = response.data;
+
+        if (data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const selectedPost = data[randomIndex];
+          const remainingPosts = data.filter((_, i) => i !== randomIndex);
+
+          setFeaturedPost(selectedPost);
+          setOtherPosts(remainingPosts);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching blog data:', error);
+      });
+  }, []);
+
+  
+	
+	return (
+		<div className="max-w-5xl mx-auto px-4 py-8">
+		<h2 className='m-3 font-bold text-4xl text-center'>Featured Post</h2>
+		{featuredPost && (
+		  <div className="mb-10 p-6 bg-indigo-100 rounded-2xl shadow-md hover:shadow-lg transition">
+			<h2 className="text-2xl font-bold text-indigo-800">{featuredPost.user_name}</h2>
+			<p className="text-lg font-semibold text-indigo-600 mt-2">{featuredPost.title}</p>
+			<p className="text-gray-700 mt-2">{featuredPost.content}</p>
+			<Link className='mt-5 font-bold text-fuchsia-500 text-xl' href={`/${featuredPost.id}`}>Read More</Link>
+		  </div>
+		)}
+	  
+	  <h2 className='m-3 font-bold text-4xl text-center'>More Posts</h2>
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+		  {otherPosts.map((post, index) => (
+			<div
+			  key={index}
+			  className="bg-white rounded-xl p-5 shadow hover:shadow-md border border-gray-100 transition"
+			>
+			  <h3 className="text-xl font-bold text-gray-800">{post.user_name}</h3>
+			  <p className="text-indigo-600 font-medium mt-1">{post.title}</p>
+			  <p className="text-gray-600 mt-2">{post.content}</p>
 			</div>
-		</a>
-		<div className="grid justify-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?1" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 21, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?2" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 22, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?3" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 23, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?4" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 24, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?5" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 25, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
-			<a rel="noopener noreferrer" href="#" className="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-				<img role="presentation" className="object-cover w-full rounded h-44 dark:bg-gray-500" src="https://source.unsplash.com/random/480x360?6" />
-				<div className="p-6 space-y-2">
-					<h3 className="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet repudiare legendos</h3>
-					<span className="text-xs dark:text-gray-600">January 26, 2021</span>
-					<p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent delicata indoctum pri.</p>
-				</div>
-			</a>
+		  ))}
 		</div>
-		<div className="flex justify-center">
-			<button type="button" className="px-6 py-3 text-sm rounded-md hover:underline dark:bg-gray-50 dark:text-gray-600">Load more posts...</button>
-		</div>
-	</div>
-</section>
-        </>
-  )
+	  </div>
+	  
+);
+
+
 }
 
 export default page

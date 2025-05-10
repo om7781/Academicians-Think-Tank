@@ -25,14 +25,11 @@ const page = () => {
     }, 3500);
   }
 
-  const onSignup = async () => {
+  const onSignup = async (e) => {
     try {
+      e.preventDefault()
       setLoading(true)
       await axios.post('/api/users/signup',user)
-    } catch (error) {
-      console.log(error)
-    }
-    finally{
       setLoading(false);
       toast.success(' You can Now Login!', {
         position: "top-center",
@@ -44,10 +41,14 @@ const page = () => {
         theme: "light",
         });
       redirect()
+    } catch (error) {
+      console.log(error)
     }
   }
   return (
     <>
+    <form className="space-y-4" onSubmit={onSignup}>
+
       <div className="bg-grey-lighter min-h-screen flex flex-col">
         <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
           <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
@@ -59,7 +60,8 @@ const page = () => {
               type="text"
               className="block border border-grey-light w-full p-3 rounded mb-4"
               name="fullname"
-              placeholder="Full Name"  />
+              placeholder="Full Name" 
+              required />
 
             <input 
             onChange={(e)=>{
@@ -68,16 +70,18 @@ const page = () => {
               type="text"
               className="block border border-grey-light w-full p-3 rounded mb-4"
               name="user_name"
-              placeholder="User Name"  />
+              placeholder="User Name" 
+              required />
 
             <input 
             onChange={(e)=>{
               setUser({...user,email : e.target.value})
             }}
-              type="text"
+              type="email"
               className="block border border-grey-light w-full p-3 rounded mb-4"
               name="email"
-              placeholder="Email"  />
+              placeholder="Email" 
+              required />
 
             <input 
             onChange={(e)=>{
@@ -86,14 +90,21 @@ const page = () => {
               type="password"
               className="block border border-grey-light w-full p-3 rounded mb-4"
               name="password"
-              placeholder="Password"  />
-            <button
-              onClick={onSignup}
+              placeholder="Password"  
+              required/>
+            { loading ? <button
+              disabled
+              type="submit"
+              className="w-full text-center py-3 rounded bg-gray-500 text-white hover:bg-green-dark focus:outline-none my-1"
+            >
+              Creating Account...
+            </button> : <button
               type="submit"
               className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
             >
-              {loading ? "Creating Account..." : "Create Account"}
-            </button>
+              Create Account
+            </button> }
+            
 
             <div className="text-center text-sm text-grey-dark mt-4">
               By signing up, you agree to the 
@@ -115,6 +126,7 @@ const page = () => {
           </div>
         </div>
       </div>
+      </form>
     </>
   )
 }
