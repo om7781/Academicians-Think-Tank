@@ -6,10 +6,10 @@ await connect();
 
 export async function POST(request) {
   try {
-    const { _id } = await request.json(); // directly destructure
-    const user = await Blog.findById(_id);
-    const comments = user.comments
-    return NextResponse.json(comments);
+    const { _id } = await request.json();
+    const user_id = _id 
+    const user = await Blog.find({user_id});
+    return NextResponse.json(user);
   } catch (error) {
     return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
   }

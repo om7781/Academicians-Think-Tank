@@ -1,18 +1,28 @@
 import { connect } from "@/dbConfig/dbConfig";
-import Comment from "@/models/commentModel";
+import Blog from "@/models/blog";
+
 import { NextResponse } from "next/server";
 
 
 
 await connect();
 
-export async function POST(request){
+export async function PATCH(request){
     try {
         const reqBody = await request.json();
-        const { commentData } = reqBody
-        const newComment = new Comment({ commentData: commentData });
-        await newComment.save()
-        return NextResponse.json({message:"Comment added Successfully."});
+        const commentData  = reqBody
+        const {blogid, content, username} = commentData
+        const updatedBlog = await Blog.findByIdAndUpdate(blogid, {
+        $push: {
+          comments: {
+            username : username,
+            comment : content,
+            timestamp: new Date(),
+          },
+        },
+      },
+      { new: true })
+      return NextResponse.json(updatedBlog)
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

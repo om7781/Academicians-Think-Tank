@@ -7,7 +7,7 @@ const Faq = () => {
 	<div className="container flex flex-col justify-center px-4 py-8 mx-auto md:p-8">
 		<h2 className="text-2xl font-semibold sm:text-4xl">Frequently Asked Questions</h2>
 		<p className="mt-4 mb-8 dark:text-gray-600">Here are Some answers to your queries that might help you understand more about us.</p>
-		<div className="space-y-4">
+		<div className="space-y-4 ">
 			<details className="w-full border rounded-lg">
 				<summary className="px-4 py-6 focus:outline-none focus-visible:dark:ring-violet-600">What is Academicians Think Tank?</summary>
 				<p className="px-4 py-6 pt-0 ml-4 -mt-4 dark:text-gray-600">Lectus iaculis orci metus vitae ligula dictum per. Nisl per nullam taciti at adipiscing est. </p>

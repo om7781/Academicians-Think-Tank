@@ -5,7 +5,7 @@ export function middleware(request) {
   const path = request.nextUrl.pathname
   const token = request.cookies.get('token')?.value || null
   const ispublicPath =  path === '/Login'
-  const isprivatePath = path === '/Profile'
+  const isprivatePath = path === '/Profile' || path === '/Blog/createBlog'
 
 
   if(ispublicPath && token) {
@@ -16,12 +16,12 @@ export function middleware(request) {
         return NextResponse.redirect(new URL('/Login', request.url))
     }
   
-
+  
 }
  
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/Login', '/About', '/Blog', '/Contact', '/','/Profile'],
+  matcher: ['/Login', '/About', '/Blog', '/Contact', '/','/Profile', '/Blog/createBlog'],
 }
 
 

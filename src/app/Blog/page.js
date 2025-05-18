@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { Pen } from 'lucide-react';
 
 const page = () => {
   const [featuredPost, setFeaturedPost] = useState(null);
   const [otherPosts, setOtherPosts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3003/api')
+    axios.get('/api/users/getBlog')
       .then((response) => {
         const data = response.data;
 
@@ -26,6 +27,9 @@ const page = () => {
       });
   }, []);
 
+
+ 
+
   
 	
 	return (
@@ -36,7 +40,7 @@ const page = () => {
 			<h2 className="text-2xl font-bold text-indigo-800">{featuredPost.user_name}</h2>
 			<p className="text-lg font-semibold text-indigo-600 mt-2">{featuredPost.title}</p>
 			<p className="text-gray-700 mt-2">{featuredPost.content}</p>
-			<Link className='mt-5 font-bold text-fuchsia-500 text-xl' href={`/${featuredPost.id}`}>Read More</Link>
+			<Link className='mt-5 font-bold text-fuchsia-500 text-xl' href={`/Blog/${featuredPost._id}`}>Read More</Link>
 		  </div>
 		)}
 	  
@@ -50,14 +54,17 @@ const page = () => {
 			  <h3 className="text-xl font-bold text-gray-800">{post.user_name}</h3>
 			  <p className="text-indigo-600 font-medium mt-1">{post.title}</p>
 			  <p className="text-gray-600 mt-2">{post.content}</p>
+			  <Link className='mt-5 font-bold text-fuchsia-500 text-xl' href={`/Blog/${post._id}`}>Read More</Link>
 			</div>
 		  ))}
 		</div>
+		<div className="fixed bottom-10 right-10 rounded-3xl bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 p-3 shadow-lg hover:shadow-amber-400 ">
+		  <Link href="/Blog/createBlog"> <Pen /> </Link>	
+		  </div>
 	  </div>
+
 	  
 );
-
-
 }
 
 export default page

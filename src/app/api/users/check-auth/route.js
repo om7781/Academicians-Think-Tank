@@ -6,7 +6,7 @@ export async function GET(req) {
     const token = req.cookies.get("token")?.value;
 
     if (!token) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+      return NextResponse.json({ authenticated: false }, { status: 403 });
     }
 
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);

@@ -81,15 +81,21 @@ const Navbar = () => {
             <Link href="/Blog" className="hover:text-amber-200">
               Blog
             </Link> 
+            
+            {LoggedIn ? <Link href="/Profile" className="hover:text-amber-200">
+              Profile
+            </Link> : ""}
+
             <Link href="/Contact" className="hover:text-amber-200">
               Contact
             </Link>
             {LoggedIn ? "" : <Link href="/Login" className="hover:text-amber-200">
               Login
             </Link>}
-              {LoggedIn ? <Link onClick={() => { logout(); checkAuth(); }} href="/Logout" className="hover:text-amber-200">
+              {LoggedIn ? <Link onClick={() => { logout(); checkAuth(); }} href={'/'} className="hover:text-amber-200">
               Logout
             </Link> : ""}
+            
             
           </nav>
           <button onClick={toggleMenu} className="md:hidden z-50">

@@ -8,10 +8,10 @@ const Blog = () => {
   
 
   const getData = async () =>{
-    const response = await axios('http://localhost:3003/api?_limit=3');
+    const response = await axios('/api/users/getBlog');
     const {data} = response;
+    console.log(data)
     setBlog(data)
-    console.log(blog)
     // console.log(response.data)
   } 
 
@@ -26,7 +26,7 @@ const Blog = () => {
           <section className="text-gray-600 body-font">
             <div className="container px-5 py-24 mx-auto">
               <div className="flex flex-wrap -m-4">
-                {blog.map((e, i) => {
+                {blog.slice(0, 3).map((e, i) => {
                   return (
                     <div key={i} className="p-4 md:w-1/3">
                       <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -37,7 +37,7 @@ const Blog = () => {
                         />
                         <div className="p-6">
                           <h2 className="tracking-widest text-xs title-font font-medium text-black mb-1">
-                            {e.user_name}
+                            {e.username}
                           </h2>
                           <h1 className="title-font text-2xl font-bold text-black mb-3">
                             {e.title}
@@ -45,7 +45,7 @@ const Blog = () => {
                           <p className="leading-relaxed mb-3">{e.content}</p>
                           <div className="flex items-center flex-wrap">
                             <Link
-                              href={`/${e.id}`}
+                              href={`/Blog/${e._id}`}
                               className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0"
                             >
                               Read
@@ -75,7 +75,7 @@ const Blog = () => {
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                               </svg>
-                              {e.like_count}
+                              {e.likes_count}
                             </span>
                             <span className="text-gray-400 inline-flex items-center leading-none text-sm">
                               <svg

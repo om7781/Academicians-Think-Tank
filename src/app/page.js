@@ -7,6 +7,7 @@ const page = () => {
     <>
     <div className="border-b-2 border-gray-500 pb-4"><HeroPage/></div>
     <h1 className="sm:text-5xl text-2xl font-bold title-font text-gray-900 mb-4 text-center mt-10">Our Featured Blogs</h1>
+    <div className=''></div>
     <div><Blog/></div>
     </>
   )
