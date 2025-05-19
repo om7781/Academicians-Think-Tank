@@ -1,70 +1,148 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const images = [
-  'https://www.google.com/imgres?q=tailwind%20carousel%203d&imgurl=https%3A%2F%2Fwww.codewithfaraz.com%2Fblog_img%2Ftailwind-carousel-3d.webp&imgrefurl=https%3A%2F%2Fwww.codewithfaraz.com%2Farticle%2F160%2F12-tailwind-carousel-slider-examples&docid=bluAuMv0Ug52GM&tbnid=4285BDvDv09f5M&vet=12ahUKEwjZoM7fv62NAxUEmK8BHQiKMjEQM3oECBgQAA..i&w=1183&h=362&hcb=2&ved=2ahUKEwjZoM7fv62NAxUEmK8BHQiKMjEQM3oECBgQAA',
-  'https://source.unsplash.com/800x300/?technology',
-  'https://source.unsplash.com/800x300/?nature',
-  'https://source.unsplash.com/800x300/?city',
-];
+export default function TestSlider() {
+  const teamMembers = [
+    {
+      name: "Alice Johnson",
+      role: "Frontend Developer",
+      image: "https://i.pravatar.cc/150?img=1",
+    },
+    {
+      name: "Bob Smith",
+      role: "Backend Developer",
+      image: "https://i.pravatar.cc/150?img=2",
+    },
+    {
+      name: "Clara Lee",
+      role: "UI/UX Designer",
+      image: "https://i.pravatar.cc/150?img=3",
+    },
+    {
+      name: "David Patel",
+      role: "DevOps Engineer",
+      image: "https://i.pravatar.cc/150?img=4",
+    },
+    {
+      name: "Eva Wilson",
+      role: "Project Manager",
+      image: "https://i.pravatar.cc/150?img=5",
+    },
+  ];
 
-const Carousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
+  const intervalRef = useRef(null);
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % teamMembers.length);
+    }, 2000);
   };
 
-  const goToPrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  const clearTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   };
+
+  const resetTimer = () => {
+    clearTimer();
+    startTimer();
+  };
+
+  const pauseTimer = () => clearTimer();
+  const resumeTimer = () => startTimer();
+
+  useEffect(() => {
+    startTimer();
+    return () => clearTimer();
+  }, []);
+
+  const prev = () => {
+    setCurrent((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+    resetTimer();
+  };
+
+  const next = () => {
+    setCurrent((prev) => (prev + 1) % teamMembers.length);
+    resetTimer();
+  };
+
+  const getCardPosition = (index) => {
+    const total = teamMembers.length;
+    const prevIndex = (current - 1 + total) % total;
+    const nextIndex = (current + 1) % total;
+
+    if (index === current) return "center";
+    if (index === prevIndex) return "left";
+    if (index === nextIndex) return "right";
+    return "hidden";
+  };
+
+  const getCardStyle = (position) => {
+  switch (position) {
+    case "center":
+      return "z-30 scale-110 blur-0 opacity-100";
+    case "left":
+      return "z-20 scale-90 blur-sm -translate-x-48 opacity-60";
+    case "right":
+      return "z-20 scale-90 blur-sm translate-x-48 opacity-60";
+    default:
+      return "opacity-0 pointer-events-none";
+  }
+};
+
 
   return (
-    <div className="w-full flex flex-col items-center bg-gray-900 py-6">
-      <p className="text-white mb-4">This is our carousel Component:</p>
-      <div className="relative w-[800px] h-[300px] overflow-visible flex items-center justify-center">
-        {/* Images */}
-        <div className="flex transition-transform duration-500 ease-in-out relative">
-          {images.map((img, index) => {
-            const isActive = index === currentIndex;
-            const isPrev = index === (currentIndex - 1 + images.length) % images.length;
-            const isNext = index === (currentIndex + 1) % images.length;
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-10">
+      <h1 className="text-3xl font-bold mb-8">Our Team</h1>
 
+      <div className="relative w-full max-w-5xl">
+        {/* Slider cards */}
+        <div
+          className="relative flex justify-center items-center h-80"
+          onMouseEnter={pauseTimer}
+          onMouseLeave={resumeTimer}
+        >
+          {teamMembers.map((member, index) => {
+            const position = getCardPosition(index);
             return (
-              <img
+              <div
                 key={index}
-                src={img}
-                alt={`Slide ${index}`}
-                className={`
-                  absolute rounded-lg transition-all duration-500 shadow-lg
-                  ${isActive ? 'z-20 scale-100 opacity-100' : ''}
-                  ${isPrev || isNext ? 'z-10 scale-90 opacity-50' : 'opacity-0'}
-                  ${isPrev ? '-translate-x-1/2 left-0' : ''}
-                  ${isNext ? 'translate-x-1/2 right-0' : ''}
-                  ${isActive ? 'left-1/2 -translate-x-1/2' : ''}
-                `}
-                style={{ width: '600px', height: '300px' }}
-              />
+                className={`absolute transition-transform transition-opacity duration-700 ease-in-out transform ${getCardStyle(
+                  position
+                )}`}
+              >
+                <div className="bg-white rounded-2xl shadow-lg p-6 w-64 text-center">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-24 h-24 mx-auto rounded-full mb-4 object-cover"
+                  />
+                  <h3 className="text-lg font-semibold">{member.name}</h3>
+                  <p className="text-sm text-gray-500">{member.role}</p>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* Arrows */}
+        {/* Navigation */}
         <button
-          onClick={goToPrev}
-          className="absolute left-2 z-30 bg-white/80 hover:bg-white text-black rounded-full p-2"
+          onClick={prev}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-40"
         >
-          &#8592;
+          <FaChevronLeft />
         </button>
         <button
-          onClick={goToNext}
-          className="absolute right-2 z-30 bg-white/80 hover:bg-white text-black rounded-full p-2"
+          onClick={next}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100 z-40"
         >
-          &#8594;
+          <FaChevronRight />
         </button>
       </div>
     </div>
   );
-};
-
-export default Carousel;
+}
