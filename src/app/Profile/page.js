@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 
 const UserProfile = () => {
@@ -68,7 +69,7 @@ const UserProfile = () => {
 
 
       <div className="mt-10">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-800">Your Blogs</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">Your Blogs </h3>
         {blogs.length === 0 ? (
           <p className="text-gray-500">No blogs posted yet.</p>
         ) : (
@@ -80,6 +81,7 @@ const UserProfile = () => {
                 <p className="text-sm text-gray-400 mt-2">
                   {new Date(blog.upload_date).toLocaleDateString()}
                 </p>
+                <Link className='mt-5 font-bold text-emerald-300 text-xl' href={"/Blog/" + blog._id}> Go To Blog</Link>
               </div>
             ))}
           </div>

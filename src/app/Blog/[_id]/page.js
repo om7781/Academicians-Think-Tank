@@ -11,6 +11,7 @@ const page = ({ params }) => {
     content: "",
     timestamp: Date.now()
   });
+  const [count, setcount] = useState(0)
   const [isLiked, setisLiked] = useState(false);
   const [commentbox, setCommentbox] = useState(false);
   const [comment, setComment] = useState([]);
@@ -28,10 +29,14 @@ const page = ({ params }) => {
     getData();
   }, []);
 
-  const like = () => {
-    const changedValue = !isLiked;
-    setisLiked(changedValue);
-    console.log(isLiked);
+  const like = async () => {
+    const userid = await axios.get('/api/users/user-info');
+    const { userName } =  userid.data;
+    const { _id } = await params;
+    const blogdata = await axios.post('/api/users/like', {username:userName,_id:_id})
+    const { count } = blogdata.data;
+    setcount(count)
+    setisLiked(true)
   };
 
   const getuserInfo = async () => {
@@ -138,10 +143,13 @@ const page = ({ params }) => {
                 {isLiked ? (
                   <div className="flex items-center gap-1">
                     <ThumbsUp className="w-5 h-5 fill-current" />
-                    <span>{blog.likesCount}</span>
+                    <span>{count}</span>
                   </div>
                 ) : (
+                  <>
                   <ThumbsUp className="w-5 h-5" />
+                  <span>{count}</span>
+                  </>
                 )}
                 {isLiked ? "Liked" : "Like"}
               </button>

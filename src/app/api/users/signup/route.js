@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 
 
-connect();
+await connect();
 
 
 
