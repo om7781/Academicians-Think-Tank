@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify'
 
 const page = () => {
   const router = useRouter();
+  const [isLoading, setisLoading] = useState(false)
   const [user,setUser] = useState({
     email: "",
     password: ""
@@ -24,6 +25,7 @@ const page = () => {
     try {
       e.preventDefault()
       // console.log(user)
+      setisLoading(true)
       const response = await axios.post('/api/users/login',user)
       toast.success(' You are logged in!', {
               position: "top-center",
@@ -37,9 +39,10 @@ const page = () => {
       console.log("Login Success",response.data)
       redirect();
     } catch (error) {
-      toast.error('There was an error', {
+      const errorMessage = error.response.data.error
+      toast.error(errorMessage, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -47,6 +50,9 @@ const page = () => {
         progress: undefined,
         theme: "light",
         });
+        setTimeout(() => {
+          setisLoading(false)
+        }, 3000);
     } 
   }
   return (
@@ -86,9 +92,11 @@ const page = () => {
         <Link href="/" className="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</Link>
       </div>
 
-      <button type='submit' className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+      {isLoading ? <button  disabled type='submit' className="cursor-not-allowed w-full bg-gray-500 hover:bg-gray-500 text-white font-medium py-2.5 rounded-lg transition-colors">
   Sign In
-</button>
+</button> : <button  type='submit' className="w-full bg-indigo-500 hover:bg-indigo-200 text-white font-medium py-2.5 rounded-lg transition-colors">
+  Sign In
+</button>}
       <ToastContainer/>
     </form>
 
