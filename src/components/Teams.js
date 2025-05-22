@@ -142,7 +142,7 @@ const Teams = () => {
                   position
                 )}`}
               >
-                <div className="flex items-center border-gray-200 border p-6 rounded-2xl bg-white shadow-lg w-72">
+                <div className="flex items-center border-gray-200 border p-6 rounded-2xl bg-white shadow-lg w-72 h-36">
                   <img
                     alt={member.name}
                     className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-6"
