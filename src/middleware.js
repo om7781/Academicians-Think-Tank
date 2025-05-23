@@ -1,28 +1,40 @@
-import { NextResponse, NextRequest} from 'next/server'
- 
-// This function can be marked `async` if using `await` inside
-export function middleware(request) {
-  const path = request.nextUrl.pathname
-  const token = request.cookies.get('token')?.value || null
-  const ispublicPath =  path === '/Login'
-  const isprivatePath = path === '/Profile' || path === '/Blog/createBlog'
+import { NextResponse } from 'next/server';
+import { jwtVerify } from 'jose';
 
+export async function middleware(request) {
+  const path = request.nextUrl.pathname;
+  const token = request.cookies.get('token')?.value;
 
-  if(ispublicPath && token) {
-    return NextResponse.redirect(new URL('/Profile', request.url))
+  const isPublicPath = path === '/Login';
+  const isPrivatePath = ['/Profile', '/Blog/createBlog'].includes(path);
+  const isAdminPath = path === '/AdminDashboard';
+  const isAdminLogin = path === '/Admin'
+
+  if(isAdminLogin && token) {
+    return NextResponse.json({message:"Logout First!"})
   }
 
-    if(isprivatePath && !token) {
-        return NextResponse.redirect(new URL('/Login', request.url))
+  if (isPublicPath && token) {
+    return NextResponse.redirect(new URL('/Profile', request.url));
+  }
+
+  if ((isPrivatePath || isAdminPath) && !token) {
+    return NextResponse.redirect(new URL('/Login', request.url));
+  }
+
+  if (token && isAdminPath) {
+    try {
+      const secret = new TextEncoder().encode(process.env.TOKEN_SECRET);
+      const { payload } = await jwtVerify(token, secret);
+      
+      if (!payload.isAdmin) {
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+    } catch (err) {
+      console.error('JWT verification failed:', err.message);
+      return NextResponse.redirect(new URL('/Login', request.url));
     }
-  
-  
+  }
+
+  return NextResponse.next();
 }
- 
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: ['/Login', '/About', '/Blog', '/Contact', '/','/Profile', '/Blog/createBlog'],
-}
-
-
-
