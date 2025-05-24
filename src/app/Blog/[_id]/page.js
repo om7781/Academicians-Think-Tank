@@ -19,6 +19,11 @@ const page = ({ params }) => {
   const [blog, setBlog] = useState([]);
   const [isLogged, setisLogged] = useState(false);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    return date.toLocaleString()
+  }
+
   const getData = async () => {
     const response = await axios("/api/users/getBlog/" + _id);
     const { data } = response;
@@ -106,7 +111,7 @@ const page = ({ params }) => {
                   className="text-sm sm:text-lg font-black"
                   dateTime={blog.upload_date}
                 >
-                  {blog.upload_date}
+                  {formatDate(blog.upload_date)}
                 </span>
                 <span className="mx-1">•</span>
                 <span className="font-bold">{blog.username}</span>
@@ -171,7 +176,7 @@ const page = ({ params }) => {
                       <li key={i}>
                         <p><span className="font-semibold">User:</span> {e.username}</p>
                         <p><span className="font-semibold">Content:</span> {e.comment}</p>
-                        <p><span className="font-semibold">Time:</span> {e.timestamp}</p>
+                        <p><span className="font-semibold">Time:</span> {formatDate(e.timestamp)}</p>
                       </li>
                     )})}
                     

@@ -5,8 +5,8 @@ export async function POST(request) {
     try {
         const reqBody = await request.json();
         const { _id } = reqBody;
-        // const deletedBlog = await Blog.findOneAndDelete({_id})
-        return NextResponse.json({id: _id})
+        const deletedBlog = await Blog.findOneAndDelete({_id})
+        return NextResponse.json({deleted: deletedBlog})
     } catch (error) {
         console.log(error)
         return NextResponse.json({error:error.message},{status:500})
