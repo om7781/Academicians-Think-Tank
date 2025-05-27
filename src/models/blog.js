@@ -30,6 +30,9 @@ const blogSchema = new mongoose.Schema({
     timestamp: { type: Date }
   }
 ],
+   isApproved : {
+    type: Boolean  
+}
 })
 
 const Blog = mongoose.models.blogs || mongoose.model("blogs",blogSchema)

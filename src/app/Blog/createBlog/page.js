@@ -2,9 +2,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-
-
+import { toast, ToastContainer } from "react-toastify";
 
 
 const page = () => {
@@ -17,7 +15,18 @@ const page = () => {
     setisLoading(true)
     try {
     await axios.post('/api/users/uploadBlog',blogdata)
-    router.push('/Blog')
+    toast.info(' Blog will be uploaded once the Admins approve it!', {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  });  
+    setTimeout(()=>{
+      router.push('/Blog')
+    },3500)
     } catch (error) {
       console.log(error)
     }
@@ -78,6 +87,7 @@ const page = () => {
           >
             Upload Blog
           </button>}
+          <ToastContainer/>
         </form>
       </div>
     </>

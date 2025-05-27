@@ -14,6 +14,7 @@ const UserProfile = () => {
     email: "",
     photo: "https://i.pravatar.cc/150?img=3", 
   });
+  const [isAdmin,setisAdmin] = useState(false)
   const [blogs, setBlogs] = useState([]);
 
   const logout = async() => {
@@ -29,6 +30,7 @@ const UserProfile = () => {
   const getuserInfo = async() => {
     const res = await axios.get('/api/users/user-info')
     const data = res.data
+    setisAdmin(data.isAdmin)
     const { _id } = await res.data
     setUser({...user,
       name:data.fullName,
@@ -64,7 +66,9 @@ const UserProfile = () => {
         </div>
         <div className="ml-10">
           <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={logout}>Log Out</button>
+          {isAdmin ? <Link className=" mx-2 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" href={'/AdminDashboard'} >Admin Dashboard</Link> : ""}
         </div>
+        
       </div>
 
 
