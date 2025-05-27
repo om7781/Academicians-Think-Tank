@@ -8,46 +8,55 @@ const Teams = () => {
     name: "Holden Caulfield",
     role: "UI Designer",
     image: "https://i.pravatar.cc/150?img=1",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Henry Letham",
     role: "CTO",
     image: "https://i.pravatar.cc/150?img=2",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Oskar Blinde",
     role: "Founder",
     image: "https://i.pravatar.cc/150?img=3",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "John Doe",
     role: "DevOps",
     image: "https://i.pravatar.cc/150?img=4",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Martin Eden",
     role: "Software Engineer",
     image: "https://i.pravatar.cc/150?img=5",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Boris Kitua",
     role: "UX Researcher",
     image: "https://i.pravatar.cc/150?img=1",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Atticus Finch",
     role: "QA Engineer",
     image: "https://i.pravatar.cc/150?img=2",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Alper Kamu",
     role: "System",
     image: "https://i.pravatar.cc/150?img=3",
+    job: "Designs and Improves UI, Also a Mentor."
   },
   {
     name: "Rodrigo Monchi",
     role: "Product Manager",
     image: "https://i.pravatar.cc/150?img=4",
+    job: "Designs and Improves UI, Also a Mentor."
   },
 ];
 
@@ -128,7 +137,7 @@ const Teams = () => {
       </div>
 
       <div
-        className="relative w-full max-w-5xl"
+        className="mt-10 relative w-full max-w-5xl"
         onMouseEnter={pauseTimer}
         onMouseLeave={resumeTimer}
       >
@@ -142,7 +151,7 @@ const Teams = () => {
                   position
                 )}`}
               >
-                <div className="flex items-center border-gray-200 border p-6 rounded-2xl bg-white shadow-lg w-72 h-36">
+                <div className="flex items-center border-gray-200 border p-10 rounded-2xl bg-white shadow-lg w-85 h-50">
                   <img
                     alt={member.name}
                     className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-6"
@@ -152,7 +161,8 @@ const Teams = () => {
                     <h2 className="text-gray-900 title-font font-medium">
                       {member.name}
                     </h2>
-                    <p className="text-gray-500">{member.role}</p>
+                    <p className="text-black">{member.role}</p>
+                    <p className="text-gray-500">{member.job}</p>
                   </div>
                 </div>
               </div>
