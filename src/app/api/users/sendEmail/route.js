@@ -26,6 +26,4 @@ export async function POST(request){
         console.log(error.message)
         return NextResponse.json({error:error.message},{status:500})
     }
-
-
 }

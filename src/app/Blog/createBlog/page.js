@@ -42,7 +42,8 @@ const page = () => {
     title: "",
     content: "",
     likesCount:[],
-    comments:[]
+    comments:[],
+    reports:[]
     })
   }
   

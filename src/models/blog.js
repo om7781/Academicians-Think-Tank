@@ -32,7 +32,11 @@ const blogSchema = new mongoose.Schema({
 ],
    isApproved : {
     type: Boolean  
-}
+},
+    reports : [{
+        username:String,
+        comment:String
+    }]
 })
 
 const Blog = mongoose.models.blogs || mongoose.model("blogs",blogSchema)

@@ -4,6 +4,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { BadgeCheck } from "lucide-react";
+
+
 
 
 const UserProfile = () => {
@@ -14,9 +17,17 @@ const UserProfile = () => {
     email: "",
     photo: "https://i.pravatar.cc/150?img=3", 
   });
+  const [userinfo, setuserinfo] = useState({})
+  const [isverified,setisverified] = useState(false)
+
   const [isAdmin,setisAdmin] = useState(false)
   const [blogs, setBlogs] = useState([]);
 
+  const verifyEmail= async() =>{
+    const response = await axios.post('/api/users/verifyEmail',userinfo)
+    console.log(response)
+  
+  }
   const logout = async() => {
     try {
       await axios.get('/api/users/logout');
@@ -34,21 +45,25 @@ const UserProfile = () => {
     const { _id } = await res.data
     setUser({...user,
       name:data.fullName,
-      email:data.email
-    })
-    
+      email:data.email,
+      id:data._id
+    }) 
+    if(data.isVerified){
+      setisverified(true)
+    }
+    setuserinfo({email:data.email,userId:data._id})
     try {
       const blogdata = await axios.post("/api/users/getblogbyid",{_id}); 
       setBlogs(blogdata.data)
     } catch (err) {
       console.error("Error fetching blogs", err);
     }
-
   }
 
   useEffect(()=>{
     getuserInfo()
   },[])
+
 
 
   return (
@@ -62,15 +77,14 @@ const UserProfile = () => {
         <div>
           <h2 className="text-3xl font-bold text-gray-800">{user.name}</h2>
           <p className="text-gray-600 mt-2">{user.about}</p>
-          <p className="text-sm text-gray-500 mt-1">{user.email}</p>
+          <p className="text-sm text-gray-500 mt-1 flex">{user.email} <span >{isverified ? <span><BadgeCheck /></span> : ""}</span></p>
+          {!isverified && <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={verifyEmail}>Verify</button>}
         </div>
         <div className="ml-10">
           <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={logout}>Log Out</button>
           {isAdmin ? <Link className=" mx-2 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" href={'/AdminDashboard'} >Admin Dashboard</Link> : ""}
-        </div>
-        
+        </div>    
       </div>
-
 
       <div className="mt-10">
         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Your Blogs </h3>
@@ -86,6 +100,7 @@ const UserProfile = () => {
                   {new Date(blog.upload_date).toLocaleDateString()}
                 </p>
                 <Link className='mt-5 font-bold text-emerald-300 text-xl' href={"/Blog/" + blog._id}> Go To Blog</Link>
+                {blog.isApproved ? "Approved" : "Not Approved Yet"}
               </div>
             ))}
           </div>
