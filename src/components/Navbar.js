@@ -64,7 +64,6 @@ const Navbar = () => {
 
   return (
     <>
-     
       <header className="bg-blue-950 text-amber-50 p-4 sticky top-0 z-50 w-full">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">

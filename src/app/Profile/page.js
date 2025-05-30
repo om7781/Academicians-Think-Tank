@@ -101,6 +101,7 @@ const UserProfile = () => {
                 </p>
                 <Link className='mt-5 font-bold text-emerald-300 text-xl' href={"/Blog/" + blog._id}> Go To Blog</Link>
                 {blog.isApproved ? "Approved" : "Not Approved Yet"}
+                
               </div>
             ))}
           </div>

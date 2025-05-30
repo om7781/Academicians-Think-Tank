@@ -3,6 +3,8 @@ import axios from "axios";
 import { MessageCircle, Send, ThumbsUp, TriangleAlert } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+
 
 const page = ({ params }) => {
   const [commentData, setcommentdata] = useState({
@@ -30,21 +32,45 @@ const page = ({ params }) => {
     const response = await axios("/api/users/getBlog/" + _id);
     const { data } = response;
     setBlog(data);
-  };
+    setcount(data.likesCount.length)
+    return data;
+  }
+
 
   useEffect(() => {
     getData();
   }, []);
+    
+  const updateLike = (blogData, userName) => {
+  if (blogData.likesCount.includes(userName)) {
+    setisLiked(true);
+  } else {
+    setisLiked(false);
+  }
+};
 
   const like = async () => {
-    const userid = await axios.get('/api/users/user-info');
-    const { userName } =  userid.data;
-    const { _id } = await params; //Blog id
-    const blogdata = await axios.post('/api/users/like', {username:userName,_id:_id})
-    const { count } = blogdata.data;
-    setcount(count)
-    setisLiked(true)
-  };
+  try {
+    if (isLogged) {
+      const userid = await axios.get('/api/users/user-info');
+      const { userName } = userid.data;
+      const { _id } = await params;
+
+      const blogdata = await axios.post('/api/users/like', { username: userName, _id });
+      const { count } = blogdata.data;
+      setcount(count)
+      setisLiked(true); 
+    } else {
+      toast.error("Please Log in to Like the post!", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "light",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const getuserInfo = async () => {
     const res = await axios.get('/api/users/user-info');
@@ -52,16 +78,22 @@ const page = ({ params }) => {
     const { _id } = await params;
     setcommentdata({ ...commentData, username: data.userName, blogid: _id });
     setuserdata({...userdata, username:data.userName, blogid:_id})
+    return data.userName;
   };
 
   useEffect(() => {
-    getuserInfo();
-  }, []);
+  const fetchDataAndUpdateLike = async () => {
+    const userName = await getuserInfo();
+    const blogData = await getData();
+    updateLike(blogData, userName);
+  };
+  fetchDataAndUpdateLike();
+}, []);
+
 
   const uploadComment = async () => {
     const res = await axios.patch('/api/users-comment/comment', commentData);
     setcommentdata({...commentData,content:""})
-
     await getComment()
   };
 
@@ -82,6 +114,7 @@ const page = ({ params }) => {
   useEffect(() => {
      getComment();
   }, []);
+
 
   const displayCommentBox = () => {
     setCommentbox(true)
@@ -158,6 +191,7 @@ const page = ({ params }) => {
             )}
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <ToastContainer/>
               <button
                 onClick={like}
                 className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition"
