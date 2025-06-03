@@ -1,13 +1,16 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
+
 
 const page = () => {
   const [blogs, setblogs] = useState([]);
   const [users, setusers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
+  const router = useRouter()
 
   const getBlogs = async () => {
     const response = await axios.get("/api/users/getBlog");
@@ -121,6 +124,9 @@ const page = () => {
                 >
                   Delete
                 </button>
+                <button onClick={()=>{
+                  router.push(`/AdminDashboard/${blog._id}`)
+                }} className="mt-4 ml-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Reports({blog.reports.length})</button>
               </div>
             ) : null
           )}
