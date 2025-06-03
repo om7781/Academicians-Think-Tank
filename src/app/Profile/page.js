@@ -22,6 +22,7 @@ const UserProfile = () => {
 
   const [isAdmin,setisAdmin] = useState(false)
   const [blogs, setBlogs] = useState([]);
+  const [reports, setreports] = useState([]);
 
   const verifyEmail= async() =>{
     const response = await axios.post('/api/users/verifyEmail',userinfo)
@@ -55,11 +56,16 @@ const UserProfile = () => {
     try {
       const blogdata = await axios.post("/api/users/getblogbyid",{_id}); 
       setBlogs(blogdata.data)
+      blogs.map((blog,i)=>{
+        setreports(blog.reports)
+      })
     } catch (err) {
       console.error("Error fetching blogs", err);
     }
   }
-
+  const getReports = async()=>{
+    console.log(reports)
+  }
   useEffect(()=>{
     getuserInfo()
   },[])
@@ -101,7 +107,9 @@ const UserProfile = () => {
                 </p>
                 <Link className='mt-5 font-bold text-emerald-300 text-xl' href={"/Blog/" + blog._id}> Go To Blog</Link>
                 {blog.isApproved ? "Approved" : "Not Approved Yet"}
-                
+                <button onClick={()=>{
+                  getReports()
+                }}>Get report</button>
               </div>
             ))}
           </div>
