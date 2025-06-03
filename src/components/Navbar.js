@@ -107,18 +107,29 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 bg-blue-400 text-amber-50 flex flex-col items-center justify-center space-y-6 text-xl md:hidden z-40">
           <nav className="flex flex-col space-y-4 text-center">
-            <Link href="/" className="hover:text-amber-200" onClick={toggleMenu}>
+            <Link href="/" className="hover:text-amber-200">
               Home
             </Link>
-            <Link href="/About" className="hover:text-amber-200" onClick={toggleMenu}>
+            <Link href="/About" className="hover:text-amber-200">
               About
             </Link>
-            <Link href="/Blog" className="hover:text-amber-200" onClick={toggleMenu}>
+            <Link href="/Blog" className="hover:text-amber-200">
               Blog
-            </Link>
-            <Link href="/Contact" className="hover:text-amber-200" onClick={toggleMenu}>
+            </Link> 
+            
+            {LoggedIn ? <Link href="/Profile" className="hover:text-amber-200">
+              Profile
+            </Link> : ""}
+
+            <Link href="/Contact" className="hover:text-amber-200">
               Contact
             </Link>
+            {LoggedIn ? "" : <Link href="/Login" className="hover:text-amber-200">
+              Login
+            </Link>}
+              {LoggedIn ? <Link onClick={() => { logout(); checkAuth(); }} href={'/'} className="hover:text-amber-200">
+              Logout
+            </Link> : ""}
           </nav>
         </div>
       )}
