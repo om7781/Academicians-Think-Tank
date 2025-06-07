@@ -105,7 +105,7 @@ const Navbar = () => {
 
     
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-blue-400 text-amber-50 flex flex-col items-center justify-center space-y-6 text-xl md:hidden z-40">
+        <div onClick={toggleMenu} className="fixed inset-0 bg-blue-400 text-amber-50 flex flex-col items-center justify-center space-y-6 text-xl md:hidden z-40">
           <nav className="flex flex-col space-y-4 text-center">
             <Link href="/" className="hover:text-amber-200">
               Home

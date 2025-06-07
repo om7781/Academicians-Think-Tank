@@ -8,11 +8,6 @@ export async function middleware(request) {
   const isPublicPath = path === '/Login';
   const isPrivatePath = ['/Profile', '/Blog/createBlog'].includes(path);
   const isAdminPath = path === '/AdminDashboard';
-  const isAdminLogin = path === '/Admin'
-
-  if(isAdminLogin && token) {
-    return NextResponse.json({message:"Logout First!"})
-  }
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/Profile', request.url));
