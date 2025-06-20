@@ -36,7 +36,11 @@ const blogSchema = new mongoose.Schema({
     reports : [{
         username:String,
         comment:String
-    }]
+    }],
+    category : {
+        type:String,
+        required: true
+    }
 })
 
 const Blog = mongoose.models.blogs || mongoose.model("blogs",blogSchema)
