@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "@/models/userModels";
 import nodemailer from 'nodemailer'
+import { NextResponse } from "next/server";
 
 export const sendEmail = async ({ email, emailtype, userId }) => {
   try {
@@ -42,6 +43,6 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
     const mailresponse = await transport.sendMail(mailOptions);
     return mailresponse;
   } catch (error) {
-    return console.log(error);
+    return NextResponse.json({success:false, error:error.message},{status:400})
   }
 };

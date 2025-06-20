@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
+
 
 
 
@@ -19,14 +20,40 @@ const UserProfile = () => {
   });
   const [userinfo, setuserinfo] = useState({})
   const [isverified,setisverified] = useState(false)
-
+  const [verifyenabled,setverifyenabled] = useState(true)
   const [isAdmin,setisAdmin] = useState(false)
   const [blogs, setBlogs] = useState([]);
   const [reports, setreports] = useState([]);
 
   const verifyEmail= async() =>{
+    setverifyenabled(false)
     const response = await axios.post('/api/users/verifyEmail',userinfo)
-    console.log(response)
+    const respdata = response.data
+    if(respdata.success){
+      toast.success("Email Sent Successfully!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    }
+    if(!respdata.success){
+      toast.error("Try again later", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+    }
+    setTimeout(()=>{
+      setverifyenabled(true)
+    },5000)
   
   }
   const logout = async() => {
@@ -71,7 +98,6 @@ const UserProfile = () => {
   },[])
 
 
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <div className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center gap-6">
@@ -84,7 +110,8 @@ const UserProfile = () => {
           <h2 className="text-3xl font-bold text-gray-800">{user.name}</h2>
           <p className="text-gray-600 mt-2">{user.about}</p>
           <p className="text-sm text-gray-500 mt-1 flex">{user.email} <span >{isverified ? <span><BadgeCheck /></span> : ""}</span></p>
-          {!isverified && <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={verifyEmail}>Verify</button>}
+          {verifyenabled ? !isverified && <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={verifyEmail}>Verify</button> : <button disabled className="inline-flex text-white bg-gray-600 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={verifyEmail}>Verify</button>}
+          <ToastContainer/>
         </div>
         <div className="ml-10">
           <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onClick={logout}>Log Out</button>

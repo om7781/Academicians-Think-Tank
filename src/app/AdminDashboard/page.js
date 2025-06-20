@@ -74,6 +74,9 @@ const page = () => {
                 <p className="text-sm text-gray-500 mt-2">
                   {new Date(blog.upload_date).toLocaleDateString()}
                 </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  {blog.username}
+                </p>
                 <div className="flex space-x-4 mt-4">
                   <button
                     onClick={() => approveBlog(blog._id)}
@@ -114,6 +117,9 @@ const page = () => {
                 <p className="text-gray-700 line-clamp-3">{blog.content}</p>
                 <p className="text-sm text-gray-500 mt-2">
                   {new Date(blog.upload_date).toLocaleDateString()}
+                </p>
+                 <p className="text-sm text-gray-500 mt-2">
+                  {blog.username}
                 </p>
                 <button
                   onClick={() => {
