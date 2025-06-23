@@ -80,8 +80,8 @@ const Page = () => {
               className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl border border-gray-200 transition cursor-pointer"
               onClick={() => router.push(`/Blog/${post._id}`)}
             >
-              <h3 className="text-xl font-bold text-gray-900">{post.username}</h3>
-              <p className="text-indigo-600 font-medium mt-1">{post.title}</p>
+              <h3 className="text-xl font-bold text-gray-900">{post.title}</h3>
+              <p className="text-indigo-600 font-medium mt-1">{post.username}</p>
               <p className="text-gray-700 mt-2 line-clamp-3">{post.content}</p>
               <Link
                 href={`/Blog/${post._id}`}
