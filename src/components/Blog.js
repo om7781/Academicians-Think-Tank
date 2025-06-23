@@ -42,7 +42,7 @@ const Blog = () => {
                           <h1 className="title-font text-2xl font-bold text-black mb-3">
                             {e.title}
                           </h1>
-                          <p className="leading-relaxed mb-3">{e.content}</p>
+                          <p className="leading-relaxed mb-3 line-clamp-3">{e.content}</p>
                           <div className="flex items-center flex-wrap">
                             <Link
                               href={`/Blog/${e._id}`}
