@@ -36,7 +36,6 @@ const page = () => {
               progress: undefined,
               theme: "light",
               });
-      console.log("Login Success",response.data)
       redirect();
     } catch (error) {
       const errorMessage = error.response.data.error

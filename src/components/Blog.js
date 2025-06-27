@@ -10,7 +10,6 @@ const Blog = () => {
   const getData = async () =>{
     const response = await axios('/api/users/getBlog');
     const {data} = response;
-    console.log(data)
     setBlog(data)
     // console.log(response.data)
   } 
